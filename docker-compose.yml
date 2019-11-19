@@ -1628,3 +1628,31 @@ services:
         - postgres
       volumes:
         - ${DATA_PATH_HOST}/Confluence:/var/atlassian/application-data
+### WOWZA ################################################
+    wowza:
+      build:
+        context: ./wowza
+        args:
+          - WOWZA_VERSION=${WOWZA_VERSION}
+      restart: always
+      entrypoint: /sbin/entrypoint.sh
+      volumes:
+        - ${DATA_PATH_HOST}/wowza/log/WowzaStreamingEngine:/usr/local/WowzaStreamingEngine/logs
+        - ${DATA_PATH_HOST}/wowza/log/WowzaStreamingEngine/manager:/usr/local/WowzaStreamingEngine/manager/logs
+        - ${DATA_PATH_HOST}/wowza/log/supervisord:/supervisor/supervisord.log
+      expose:
+        - "1935/tcp"
+        - "8086/tcp"
+        - "8087/tcp"
+        - "8088/tcp"
+      ports:
+        - "${WOWZA_RTMP_PORT}:1935"
+        - "8087:8086"
+        - "8088:8088"
+      environment:
+        - WSE_MGR_USER=${WOWZA_WSE_MGR_USER}
+        - WSE_MGR_PASS=${WOWZA_WSE_MGR_PASS}
+        - WSE_LIC=${WOWZA_WSE_LIC}
+      networks:
+        - backend
+        - frontend
