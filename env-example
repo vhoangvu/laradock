@@ -841,3 +841,11 @@ WOWZA_WSE_MGR_USER=admin
 WOWZA_WSE_MGR_PASS=password
 # License key
 WOWZA_WSE_LIC=license key
+# SSL path folder
+WOWZA_SSL_PATH=./wowza/ssl/
+# Website domain that use Webrtc
+WOWZA_WEBRTC_DOMAIN=directory.test
+# SSL cert
+WOWZA_WEBRTC_CERT=directory.test.crt
+# SSL key
+WOWZA_WEBRTC_KEY=directory.test.key

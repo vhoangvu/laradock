@@ -1635,11 +1635,12 @@ services:
         args:
           - WOWZA_VERSION=${WOWZA_VERSION}
       restart: always
-      entrypoint: /sbin/entrypoint.sh
+      entrypoint: /sbin/custom_entrypoint.sh
       volumes:
         - ${DATA_PATH_HOST}/wowza/log/WowzaStreamingEngine:/usr/local/WowzaStreamingEngine/logs
         - ${DATA_PATH_HOST}/wowza/log/WowzaStreamingEngine/manager:/usr/local/WowzaStreamingEngine/manager/logs
         - ${DATA_PATH_HOST}/wowza/log/supervisord:/supervisor/supervisord.log
+        - ${WOWZA_SSL_PATH}:/usr/local/WowzaStreamingEngine/essensus/ssl
       expose:
         - "1935/tcp"
         - "8086/tcp"
@@ -1647,12 +1648,16 @@ services:
         - "8088/tcp"
       ports:
         - "${WOWZA_RTMP_PORT}:1935"
-        - "8087:8086"
+        - "8086:8086"
+        - "8087:8087"
         - "8088:8088"
       environment:
         - WSE_MGR_USER=${WOWZA_WSE_MGR_USER}
         - WSE_MGR_PASS=${WOWZA_WSE_MGR_PASS}
         - WSE_LIC=${WOWZA_WSE_LIC}
+        - SSL_WEBRTC_DOMAIN=${WOWZA_WEBRTC_DOMAIN}
+        - SSL_WEBRTC_CERT=${WOWZA_WEBRTC_CERT}
+        - SSL_WEBRTC_KEY=${WOWZA_WEBRTC_KEY}
       networks:
         - backend
         - frontend
