@@ -67,6 +67,31 @@ if [ -f "${WMSAPP_HOME}/essensus/ssl/keystore.jks" ]; then
 		cat VHost.xml > ${WMSAPP_HOME}/conf/VHost.xml
 		rm vhostTmp VHost.xml
 fi
+#essensus customize: enable webrtc in VHost.xml
+cat "${WMSAPP_HOME}/conf/VHost.xml" > vhostTmp
+xmlstarlet ed -L -r "/Root/VHost/HostPortList/HostPort[Port=443]" -v SSLHostPort vhostTmp
+xmlstarlet ed -L -i "/Root/VHost/HostPortList/SSLHostPort/HTTPProviders/HTTPProvider[4]" -t elem -n HTTPProvider -v "" vhostTmp
+xmlstarlet ed -L -s "/Root/VHost/HostPortList/SSLHostPort/HTTPProviders/HTTPProvider[4]" -t elem -n BaseClass -v "com.wowza.wms.webrtc.http.HTTPWebRTCExchangeSessionInfo" vhostTmp
+xmlstarlet ed -L -s "/Root/VHost/HostPortList/SSLHostPort/HTTPProviders/HTTPProvider[4]" -t elem -n RequestFilters -v "*webrtc-session.json" vhostTmp
+xmlstarlet ed -L -s "/Root/VHost/HostPortList/SSLHostPort/HTTPProviders/HTTPProvider[4]" -t elem -n AuthenticationMethod -v "none" vhostTmp
+xmlstarlet ed -L -r "/Root/VHost/HostPortList/SSLHostPort" -v HostPort vhostTmp
+cat vhostTmp > ${WMSAPP_HOME}/conf/VHost.xml
+rm vhostTmp
+#essensus customize: enable webrtc in Application.xml
+cat "${WMSAPP_HOME}/conf/Application.xml" > applicationTmp
+xmlstarlet ed -L -u "/Root/Application/WebRTC/EnablePublish" -v "true" applicationTmp
+xmlstarlet ed -L -u "/Root/Application/WebRTC/EnablePlay" -v "true" applicationTmp
+xmlstarlet ed -L -u "/Root/Application/WebRTC/EnableQuery" -v "true" applicationTmp
+xmlstarlet ed -L -u "/Root/Application/WebRTC/DebugLog" -v "true" applicationTmp
+xmlstarlet ed -L -s "/Root/Application/RTP/Properties" -t elem -n rtpForceH264Constraint -v "true" applicationTmp
+xmlstarlet ed -L -s "/Root/Application/RTP/Properties" -t elem -n rtpForceH264ConstraintValue -v "192" applicationTmp
+xmlstarlet ed -L -s "/Root/Application/RTP/Properties" -t elem -n rtpUseLowestH264Constraint -v "false" applicationTmp
+xmlstarlet ed -L -s "/Root/Application/RTP/Properties" -t elem -n rtpUseHighestH264Constraint -v "true" applicationTmp
+cat applicationTmp > ${WMSAPP_HOME}/conf/Application.xml
+rm applicationTmp
+
+cp /usr/local/WowzaStreamingEngine/conf/VHost.xml /usr/local/WowzaStreamingEngine/essensus/ssl/
+cp /usr/local/WowzaStreamingEngine/conf/Application.xml /usr/local/WowzaStreamingEngine/essensus/ssl/
 
 # Make supervisor log files configurable
 #sed 's|^logfile=.*|logfile='"${SUPERVISOR_LOG_HOME}"'/supervisor/supervisord.log ;|' -i /etc/supervisor/supervisord.conf
