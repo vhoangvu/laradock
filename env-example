@@ -849,3 +849,8 @@ WOWZA_WEBRTC_DOMAIN=directory.test
 WOWZA_WEBRTC_CERT=directory.test.crt
 # SSL key
 WOWZA_WEBRTC_KEY=directory.test.key
+
+### SOCKETIO ##################################################
+
+# Node version to use
+SOCKETIO_NODE_VERSION=alpine

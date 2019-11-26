@@ -1661,3 +1661,24 @@ services:
       networks:
         - backend
         - frontend
+### SOCKETIO ################################################
+    socketio:
+      build:
+        context: ./socketio
+        args:
+          - NODE_VERSION=${SOCKETIO_NODE_VERSION}
+      #restart: always
+      #entrypoint: /sbin/custom_entrypoint.sh
+      # volumes:
+        # - ${DATA_PATH_HOST}/wowza/log/WowzaStreamingEngine:/usr/local/WowzaStreamingEngine/logs
+        # - ${DATA_PATH_HOST}/wowza/log/WowzaStreamingEngine/manager:/usr/local/WowzaStreamingEngine/manager/logs
+        # - ${DATA_PATH_HOST}/wowza/log/supervisord:/supervisor/supervisord.log
+        # - ${WOWZA_SSL_PATH}:/usr/local/WowzaStreamingEngine/essensus/ssl
+      expose:
+        - "3000/tcp"
+      ports:
+        - "3000:3000"
+      #environment:
+      networks:
+        - backend
+        - frontend

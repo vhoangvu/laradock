@@ -1,0 +1,17 @@
+{
+  "name": "socket.io-docker",
+  "version": "0.0.0",
+  "description": "A websocket using socket.io",
+  "main": "index.js",
+  "author": "Vu Nguyen",
+  "private": true,
+  "license": "BSD",
+  "dependencies": {
+    "express": "^4.17.1",
+    "socket.io": "^2.3.0",
+    "ws": "^7.2.0"
+  },
+  "scripts": {
+    "start": "node index.js"
+  }
+}
