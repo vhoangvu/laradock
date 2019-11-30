@@ -111,7 +111,23 @@ xmlstarlet ed -L -s "/Root/Application/RTP/Properties" -t elem -n rtpUseLowestH2
 xmlstarlet ed -L -s "/Root/Application/RTP/Properties" -t elem -n rtpUseHighestH264Constraint -v "true" applicationTmp
 cat applicationTmp > ${WMSAPP_HOME}/conf/Application.xml
 rm applicationTmp
-
+#essensus customize: create webrtc application
+if [ -d "${WMSAPP_HOME}/conf/webrtc" ]
+then
+	echo "webrtc configuration directory already exists.. skipping creation"
+else
+	mkdir "${WMSAPP_HOME}/conf/webrtc"
+fi
+if [ -f "${WMSAPP_HOME}/conf/webrtc/Application.xml" ] 
+then
+	echo "Skipping WebRTC. Already configured."
+else
+	echo "Installing WebRTC example package..."
+	#replace external ip address in Application.xml file
+	sed s/\\[external-ip-address\\]/$EXTERNAL_IP/g "${WMSAPP_HOME}/essensus/conf/webrtc/Application.xml" > ApplicationTmp.xml
+	mv ApplicationTmp.xml "${WMSAPP_HOME}/conf/webrtc/Application.xml"
+fi
+#essensus customize: copy to test
 cp /usr/local/WowzaStreamingEngine/conf/VHost.xml /usr/local/WowzaStreamingEngine/essensus/ssl/
 cp /usr/local/WowzaStreamingEngine/conf/Application.xml /usr/local/WowzaStreamingEngine/essensus/ssl/
 

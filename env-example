@@ -841,8 +841,10 @@ WOWZA_WSE_MGR_USER=admin
 WOWZA_WSE_MGR_PASS=password
 # License key
 WOWZA_WSE_LIC=license key
-# SSL path folder
-WOWZA_SSL_PATH=./wowza/ssl/
+# SSL path folder for essensus
+WOWZA_ESSENSUS_SSL_PATH=./wowza/ssl/
+# Config template path folder for essensus
+WOWZA_ESSENSUS_CONFIG_PATH=./wowza/config
 # Website domain that use Webrtc
 WOWZA_WEBRTC_DOMAIN=directory.test
 # SSL cert
@@ -853,6 +855,8 @@ WOWZA_WEBRTC_KEY=directory.test.key
 WOWZA_STREAMLOCK_FILE=
 # Streamlock password
 WOWZA_STREAMLOCK_PASSWORD=
+# External IP
+WOWZA_EXTERNAL_IP=
 
 ### SOCKETIO ##################################################
 

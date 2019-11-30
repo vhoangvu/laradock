@@ -1640,7 +1640,8 @@ services:
         - ${DATA_PATH_HOST}/wowza/log/WowzaStreamingEngine:/usr/local/WowzaStreamingEngine/logs
         - ${DATA_PATH_HOST}/wowza/log/WowzaStreamingEngine/manager:/usr/local/WowzaStreamingEngine/manager/logs
         - ${DATA_PATH_HOST}/wowza/log/supervisord:/supervisor/supervisord.log
-        - ${WOWZA_SSL_PATH}:/usr/local/WowzaStreamingEngine/essensus/ssl
+        - ${WOWZA_ESSENSUS_SSL_PATH}:/usr/local/WowzaStreamingEngine/essensus/ssl
+        - ${WOWZA_ESSENSUS_CONFIG_PATH}:/usr/local/WowzaStreamingEngine/essensus/config
       expose:
         - "1935/tcp"
         - "8086/tcp"
@@ -1658,6 +1659,7 @@ services:
         - WSE_LIC=${WOWZA_WSE_LIC}
         - STREAMLOCK_FILE=${WOWZA_STREAMLOCK_FILE}
         - STREAMLOCK_PASSWORD=${WOWZA_STREAMLOCK_PASSWORD}
+        - EXTERNAL_IP=${WOWZA_EXTERNAL_IP}
       networks:
         - backend
         - frontend
