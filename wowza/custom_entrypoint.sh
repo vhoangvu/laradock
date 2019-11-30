@@ -40,17 +40,38 @@ if [[ ! -z $WSE_IP_PARAM ]]; then
 fi
 
 #essensus customize: fix duplicate 443 port and use existing ssl certificate
-if [ ! -z $SSL_WEBRTC_DOMAIN ]; then
-		#this part generate keystore for wowza from web server ssl certificate (nginx by default) 
-		if [ ! -f "${WMSAPP_HOME}/essensus/ssl/keystore.jks" ] && [ -f "${WMSAPP_HOME}/essensus/ssl/${SSL_WEBRTC_CERT}" ] && [ -f "${WMSAPP_HOME}/essensus/ssl/${SSL_WEBRTC_KEY}" ]; then
-			openssl pkcs12 -export -in "${WMSAPP_HOME}/essensus/ssl/${SSL_WEBRTC_CERT}" -inkey "${WMSAPP_HOME}/essensus/ssl/${SSL_WEBRTC_KEY}" -name "${SSL_WEBRTC_DOMAIN}" -out "${WMSAPP_HOME}/essensus/ssl/PKCS-12.p12" -passout pass:123456
-			keytool -importkeystore -deststorepass 123456 -destkeystore ${WMSAPP_HOME}/essensus/ssl/keystore.jks -srckeystore ${WMSAPP_HOME}/essensus/ssl/PKCS-12.p12 -srcstoretype PKCS12 -srcstorepass 123456 -noprompt
-		fi
-fi
-if [ -f "${WMSAPP_HOME}/essensus/ssl/keystore.jks" ]; then
+# if [ ! -z $SSL_WEBRTC_DOMAIN ]; then
+		# #this part generate keystore for wowza from web server ssl certificate (nginx by default) 
+		# if [ ! -f "${WMSAPP_HOME}/essensus/ssl/keystore.jks" ] && [ -f "${WMSAPP_HOME}/essensus/ssl/${SSL_WEBRTC_CERT}" ] && [ -f "${WMSAPP_HOME}/essensus/ssl/${SSL_WEBRTC_KEY}" ]; then
+			# openssl pkcs12 -export -in "${WMSAPP_HOME}/essensus/ssl/${SSL_WEBRTC_CERT}" -inkey "${WMSAPP_HOME}/essensus/ssl/${SSL_WEBRTC_KEY}" -name "${SSL_WEBRTC_DOMAIN}" -out "${WMSAPP_HOME}/essensus/ssl/PKCS-12.p12" -passout pass:123456
+			# keytool -importkeystore -deststorepass 123456 -destkeystore ${WMSAPP_HOME}/essensus/ssl/keystore.jks -srckeystore ${WMSAPP_HOME}/essensus/ssl/PKCS-12.p12 -srcstoretype PKCS12 -srcstorepass 123456 -noprompt
+		# fi
+# fi
+# if [ -f "${WMSAPP_HOME}/essensus/ssl/keystore.jks" ]; then
+		# cat "${WMSAPP_HOME}/conf/VHost.xml" > vhostTmp
+		# sed 's|\(<KeyStorePath>${com.wowza.wms.context.VHostConfigHome}/conf/keystore.jks</KeyStorePath>\)|<KeyStorePath>${com.wowza.wms.context.VHostConfigHome}/essensus/ssl/keystore.jks</KeyStorePath> <!--changed for default install. \1-->|' <vhostTmp >VHost.xml
+		# sed 's|\(<KeyStorePassword>\[password\]</KeyStorePassword>\)|<KeyStorePassword>123456</KeyStorePassword> <!--changed for default install. \1-->|' <VHost.xml >vhostTmp
+		# sed -e '/.*<!-- 443 with SSL -->$/ {
+			# N; /.*<!--$/ {
+				# N; /.*<HostPort>$/ {
+					# s/.*<!--//;
+				# }
+			# }
+		# }' <vhostTmp > VHost.xml
+		# sed -e '/.*<\/HostPort>$/ {
+			# N; /.*-->$/ {
+				# s/-->//;
+			# }
+		# }' <VHost.xml > vhostTmp
+		# sed 's|\(<Port>1935,80,443,554</Port>\)|<Port>1935,80,554</Port> <!--changed for default install. \1-->|' <vhostTmp >VHost.xml
+		# cat VHost.xml > ${WMSAPP_HOME}/conf/VHost.xml
+		# rm vhostTmp VHost.xml
+# fi
+#essensus customize: fix duplicate 443 port and use streamlock certificate
+if [ -f "${WMSAPP_HOME}/essensus/ssl/${STREAMLOCK_FILE}" ]; then
 		cat "${WMSAPP_HOME}/conf/VHost.xml" > vhostTmp
-		sed 's|\(<KeyStorePath>${com.wowza.wms.context.VHostConfigHome}/conf/keystore.jks</KeyStorePath>\)|<KeyStorePath>${com.wowza.wms.context.VHostConfigHome}/essensus/ssl/keystore.jks</KeyStorePath> <!--changed for default install. \1-->|' <vhostTmp >VHost.xml
-		sed 's|\(<KeyStorePassword>\[password\]</KeyStorePassword>\)|<KeyStorePassword>123456</KeyStorePassword> <!--changed for default install. \1-->|' <VHost.xml >vhostTmp
+		sed 's|\(<KeyStorePath>${com.wowza.wms.context.VHostConfigHome}/conf/keystore.jks</KeyStorePath>\)|<KeyStorePath>${com.wowza.wms.context.VHostConfigHome}/essensus/ssl/'"$STREAMLOCK_FILE"'</KeyStorePath> <!--changed for default install. \1-->|' <vhostTmp >VHost.xml
+		sed 's|\(<KeyStorePassword>\[password\]</KeyStorePassword>\)|<KeyStorePassword>'"$STREAMLOCK_PASSWORD"'</KeyStorePassword> <!--changed for default install. \1-->|' <VHost.xml >vhostTmp
 		sed -e '/.*<!-- 443 with SSL -->$/ {
 			N; /.*<!--$/ {
 				N; /.*<HostPort>$/ {
@@ -67,6 +88,7 @@ if [ -f "${WMSAPP_HOME}/essensus/ssl/keystore.jks" ]; then
 		cat VHost.xml > ${WMSAPP_HOME}/conf/VHost.xml
 		rm vhostTmp VHost.xml
 fi
+
 #essensus customize: enable webrtc in VHost.xml
 cat "${WMSAPP_HOME}/conf/VHost.xml" > vhostTmp
 xmlstarlet ed -L -r "/Root/VHost/HostPortList/HostPort[Port=443]" -v SSLHostPort vhostTmp

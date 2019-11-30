@@ -1651,13 +1651,13 @@ services:
         - "8086:8086"
         - "8087:8087"
         - "8088:8088"
+        - "443:443"
       environment:
         - WSE_MGR_USER=${WOWZA_WSE_MGR_USER}
         - WSE_MGR_PASS=${WOWZA_WSE_MGR_PASS}
         - WSE_LIC=${WOWZA_WSE_LIC}
-        - SSL_WEBRTC_DOMAIN=${WOWZA_WEBRTC_DOMAIN}
-        - SSL_WEBRTC_CERT=${WOWZA_WEBRTC_CERT}
-        - SSL_WEBRTC_KEY=${WOWZA_WEBRTC_KEY}
+        - STREAMLOCK_FILE=${WOWZA_STREAMLOCK_FILE}
+        - STREAMLOCK_PASSWORD=${WOWZA_STREAMLOCK_PASSWORD}
       networks:
         - backend
         - frontend

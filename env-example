@@ -849,6 +849,10 @@ WOWZA_WEBRTC_DOMAIN=directory.test
 WOWZA_WEBRTC_CERT=directory.test.crt
 # SSL key
 WOWZA_WEBRTC_KEY=directory.test.key
+# Streamlock file name
+WOWZA_STREAMLOCK_FILE=
+# Streamlock password
+WOWZA_STREAMLOCK_PASSWORD=
 
 ### SOCKETIO ##################################################
 
