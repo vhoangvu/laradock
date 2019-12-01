@@ -130,6 +130,7 @@ fi
 #essensus customize: copy to test
 cp /usr/local/WowzaStreamingEngine/conf/VHost.xml /usr/local/WowzaStreamingEngine/essensus/ssl/
 cp /usr/local/WowzaStreamingEngine/conf/Application.xml /usr/local/WowzaStreamingEngine/essensus/ssl/
+cp "${WMSAPP_HOME}/conf/webrtc/Application.xml" /usr/local/WowzaStreamingEngine/essensus/ssl/
 
 # Make supervisor log files configurable
 #sed 's|^logfile=.*|logfile='"${SUPERVISOR_LOG_HOME}"'/supervisor/supervisord.log ;|' -i /etc/supervisor/supervisord.conf
