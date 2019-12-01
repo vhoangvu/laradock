@@ -1,0 +1,3 @@
+[submodule "wowza/module"]
+	path = wowza/module
+	url = http://gitlab.essensus.com/clients/webcam-js.git
