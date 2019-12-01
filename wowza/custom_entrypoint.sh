@@ -131,6 +131,8 @@ if [ ! -d "${WMSAPP_HOME}/applications/webrtc" ]
 then
 	mkdir "${WMSAPP_HOME}/applications/webrtc"
 fi
+#essensus customize: build module
+ant -buildfile "${WMSAPP_HOME}/essensus/module/build_server.xml" compile
 #essensus customize: copy to test
 cp /usr/local/WowzaStreamingEngine/conf/VHost.xml /usr/local/WowzaStreamingEngine/essensus/ssl/
 cp /usr/local/WowzaStreamingEngine/conf/Application.xml /usr/local/WowzaStreamingEngine/essensus/ssl/
