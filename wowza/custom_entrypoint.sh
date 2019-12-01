@@ -132,6 +132,7 @@ then
 	mkdir "${WMSAPP_HOME}/applications/webrtc"
 fi
 #essensus customize: build module
+cp -a "${WMSAPP_HOME}/essensus/module/lib/." "${WMSAPP_HOME}/lib"
 ant -buildfile "${WMSAPP_HOME}/essensus/module/build_server.xml" compile
 #essensus customize: copy to test
 cp /usr/local/WowzaStreamingEngine/conf/VHost.xml /usr/local/WowzaStreamingEngine/essensus/ssl/
