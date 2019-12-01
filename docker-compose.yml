@@ -1642,6 +1642,7 @@ services:
         - ${DATA_PATH_HOST}/wowza/log/supervisord:/supervisor/supervisord.log
         - ${WOWZA_ESSENSUS_SSL_PATH}:/usr/local/WowzaStreamingEngine/essensus/ssl
         - ${WOWZA_ESSENSUS_CONFIG_PATH}:/usr/local/WowzaStreamingEngine/essensus/conf
+        - ${WOWZA_ESSENSUS_MODULE_PATH}:/usr/local/WowzaStreamingEngine/essensus/module
       expose:
         - "1935/tcp"
         - "8086/tcp"

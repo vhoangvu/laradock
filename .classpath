@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="wowza/module/src"/>
+	<classpathentry kind="lib" path="wowza/module/jar/runnable.jar"/>
+	<classpathentry kind="lib" path="wowza/module/jar/webcam-wz.jar"/>
+	<classpathentry kind="lib" path="wowza/module/lib/commons-codec-1.3.jar"/>
+	<classpathentry kind="lib" path="wowza/module/lib/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="wowza/module/lib/google-http-client-1.22.0.jar"/>
+	<classpathentry kind="lib" path="wowza/module/lib/google-http-client-jackson2-1.22.0.jar"/>
+	<classpathentry kind="lib" path="wowza/module/lib/httpclient-4.0.1.jar"/>
+	<classpathentry kind="lib" path="wowza/module/lib/httpcore-4.0.1.jar"/>
+	<classpathentry kind="lib" path="wowza/module/lib/jackson-core-2.1.3.jar"/>
+	<classpathentry kind="lib" path="wowza/module/lib/jsr305-1.3.9.jar"/>
+	<classpathentry kind="output" path="wowza/module/bin"/>
+</classpath>

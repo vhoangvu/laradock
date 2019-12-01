@@ -857,6 +857,8 @@ WOWZA_STREAMLOCK_FILE=
 WOWZA_STREAMLOCK_PASSWORD=
 # External IP
 WOWZA_EXTERNAL_IP=
+# Module path folder for essensus
+WOWZA_ESSENSUS_CONFIG_PATH=./wowza/module/
 
 ### SOCKETIO ##################################################
 
