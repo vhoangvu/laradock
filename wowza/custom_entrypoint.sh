@@ -127,6 +127,10 @@ else
 	sed s/\\[external-ip-address\\]/$EXTERNAL_IP/g "${WMSAPP_HOME}/essensus/conf/webrtc/Application.xml" > ApplicationTmp.xml
 	mv ApplicationTmp.xml "${WMSAPP_HOME}/conf/webrtc/Application.xml"
 fi
+if [ ! -d ../../applications/webrtc ]
+then
+	mkdir ../../applications/webrtc
+fi
 #essensus customize: copy to test
 cp /usr/local/WowzaStreamingEngine/conf/VHost.xml /usr/local/WowzaStreamingEngine/essensus/ssl/
 cp /usr/local/WowzaStreamingEngine/conf/Application.xml /usr/local/WowzaStreamingEngine/essensus/ssl/
