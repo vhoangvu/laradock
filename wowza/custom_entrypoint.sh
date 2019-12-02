@@ -93,7 +93,8 @@ fi
 cat "${WMSAPP_HOME}/conf/VHost.xml" > vhostTmp
 xmlstarlet ed -L -r "/Root/VHost/HostPortList/HostPort[Port=443]" -v SSLHostPort vhostTmp
 xmlstarlet ed -L -i "/Root/VHost/HostPortList/SSLHostPort/HTTPProviders/HTTPProvider[4]" -t elem -n HTTPProvider -v "" vhostTmp
-xmlstarlet ed -L -s "/Root/VHost/HostPortList/SSLHostPort/HTTPProviders/HTTPProvider[4]" -t elem -n BaseClass -v "com.wowza.wms.webrtc.http.HTTPWebRTCExchangeSessionInfo" vhostTmp
+#xmlstarlet ed -L -s "/Root/VHost/HostPortList/SSLHostPort/HTTPProviders/HTTPProvider[4]" -t elem -n BaseClass -v "com.wowza.wms.webrtc.http.HTTPWebRTCExchangeSessionInfo" vhostTmp
+xmlstarlet ed -L -s "/Root/VHost/HostPortList/SSLHostPort/HTTPProviders/HTTPProvider[4]" -t elem -n BaseClass -v "com.essensus.wowza.HTTPWebRTCExchangeSessionInfoCustom" vhostTmp
 xmlstarlet ed -L -s "/Root/VHost/HostPortList/SSLHostPort/HTTPProviders/HTTPProvider[4]" -t elem -n RequestFilters -v "*webrtc-session.json" vhostTmp
 xmlstarlet ed -L -s "/Root/VHost/HostPortList/SSLHostPort/HTTPProviders/HTTPProvider[4]" -t elem -n AuthenticationMethod -v "none" vhostTmp
 xmlstarlet ed -L -r "/Root/VHost/HostPortList/SSLHostPort" -v HostPort vhostTmp
@@ -125,6 +126,18 @@ else
 	echo "Installing WebRTC example package..."
 	#replace external ip address in Application.xml file
 	sed s/\\[external-ip-address\\]/$EXTERNAL_IP/g "${WMSAPP_HOME}/essensus/conf/webrtc/Application.xml" > ApplicationTmp.xml
+	#add essensus module
+	xmlstarlet ed -L -s "/Root/Application/Modules" -t elem -n EssensusModule -v "" ApplicationTmp.xml
+	xmlstarlet ed -L -s "/Root/Application/Modules/EssensusModule" -t elem -n Name -v "essensuslogging" ApplicationTmp.xml
+	xmlstarlet ed -L -s "/Root/Application/Modules/EssensusModule" -t elem -n Description -v "Essensus Logging" ApplicationTmp.xml
+	xmlstarlet ed -L -s "/Root/Application/Modules/EssensusModule" -t elem -n Class -v "com.essensus.wowza.ModuleAccessControlStreaming" ApplicationTmp.xml
+	xmlstarlet ed -L -r "/Root/Application/Modules/EssensusModule" -v Module ApplicationTmp.xml
+	#add front end domain info
+	xmlstarlet ed -L -s "/Root/Application/Properties" -t elem -n EssensusProperty -v "" ApplicationTmp.xml
+	xmlstarlet ed -L -s "/Root/Application/Properties/EssensusProperty" -t elem -n Name -v "mainDomain" ApplicationTmp.xml
+	xmlstarlet ed -L -s "/Root/Application/Properties/EssensusProperty" -t elem -n Value -v "${FRONTEND_DOMAIN_AND_PROTOCOL_AND_PORT}" ApplicationTmp.xml
+	xmlstarlet ed -L -s "/Root/Application/Properties/EssensusProperty" -t elem -n Type -v "String" ApplicationTmp.xml
+	xmlstarlet ed -L -r "/Root/Application/Properties/EssensusProperty" -v Property ApplicationTmp.xml
 	mv ApplicationTmp.xml "${WMSAPP_HOME}/conf/webrtc/Application.xml"
 fi
 if [ ! -d "${WMSAPP_HOME}/applications/webrtc" ]
@@ -132,12 +145,19 @@ then
 	mkdir "${WMSAPP_HOME}/applications/webrtc"
 fi
 #essensus customize: build module
+rm "${WMSAPP_HOME}/java"
+ln -s /usr/lib/jvm/default-java "${WMSAPP_HOME}/java"
+rm -rf "${WMSAPP_HOME}/essensus/module/bin"
+rm -rf "${WMSAPP_HOME}/essensus/module/jar"
 cp -a "${WMSAPP_HOME}/essensus/module/lib/." "${WMSAPP_HOME}/lib"
-ant -buildfile "${WMSAPP_HOME}/essensus/module/build_server.xml" compile
+ant -buildfile "${WMSAPP_HOME}/essensus/module/build_server.xml" jar
+#essensus customize: add transcode
+rm -rf "${WMSAPP_HOME}/transcoder/templates/*.*" 
+cp "${WMSAPP_HOME}/essensus/module/conf/transcoder/audioonly_h264.xml" "${WMSAPP_HOME}/transcoder/templates" 
 #essensus customize: copy to test
-cp /usr/local/WowzaStreamingEngine/conf/VHost.xml /usr/local/WowzaStreamingEngine/essensus/ssl/
-cp /usr/local/WowzaStreamingEngine/conf/Application.xml /usr/local/WowzaStreamingEngine/essensus/ssl/
-cp "${WMSAPP_HOME}/conf/webrtc/Application.xml" /usr/local/WowzaStreamingEngine/essensus/ssl/
+#cp /usr/local/WowzaStreamingEngine/conf/VHost.xml /usr/local/WowzaStreamingEngine/essensus/ssl/
+#cp /usr/local/WowzaStreamingEngine/conf/Application.xml /usr/local/WowzaStreamingEngine/essensus/ssl/
+#cp "${WMSAPP_HOME}/conf/webrtc/Application.xml" /usr/local/WowzaStreamingEngine/essensus/ssl/
 
 # Make supervisor log files configurable
 #sed 's|^logfile=.*|logfile='"${SUPERVISOR_LOG_HOME}"'/supervisor/supervisord.log ;|' -i /etc/supervisor/supervisord.conf
