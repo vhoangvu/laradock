@@ -844,7 +844,7 @@ WOWZA_WSE_LIC=license key
 # SSL path folder for essensus
 WOWZA_ESSENSUS_SSL_PATH=./wowza/ssl/
 # Config template path folder for essensus
-WOWZA_ESSENSUS_CONFIG_PATH=./wowza/config/
+WOWZA_ESSENSUS_CONFIG_PATH=./wowza/conf/
 # Website domain that use Webrtc
 WOWZA_WEBRTC_DOMAIN=directory.test
 # SSL cert
