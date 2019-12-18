@@ -12,6 +12,18 @@ if [ ! -f /etc/nginx/ssl/directory.test.crt ]; then
     openssl x509 -req -days 365 -in "/etc/nginx/ssl/directory.test.csr" -signkey "/etc/nginx/ssl/directory.test.key" -out "/etc/nginx/ssl/directory.test.crt"
 fi
 
+if [ ! -f /etc/nginx/ssl/coochee.test.crt ]; then
+    openssl genrsa -out "/etc/nginx/ssl/coochee.test.key" 2048
+    openssl req -new -key "/etc/nginx/ssl/coochee.test.key" -out "/etc/nginx/ssl/coochee.test.csr" -subj "/CN=coochee.test/O=coochee.test/C=US"
+    openssl x509 -req -days 365 -in "/etc/nginx/ssl/coochee.test.csr" -signkey "/etc/nginx/ssl/coochee.test.key" -out "/etc/nginx/ssl/coochee.test.crt"
+fi
+
+if [ ! -f /etc/nginx/ssl/deardomina.test.crt ]; then
+    openssl genrsa -out "/etc/nginx/ssl/deardomina.test.key" 2048
+    openssl req -new -key "/etc/nginx/ssl/deardomina.test.key" -out "/etc/nginx/ssl/deardomina.test.csr" -subj "/CN=deardomina.test/O=deardomina.test/C=US"
+    openssl x509 -req -days 365 -in "/etc/nginx/ssl/deardomina.test.csr" -signkey "/etc/nginx/ssl/deardomina.test.key" -out "/etc/nginx/ssl/deardomina.test.crt"
+fi
+
 if [ ! -f /etc/nginx/ssl/vitalitycams.test.crt ]; then
     openssl genrsa -out "/etc/nginx/ssl/vitalitycams.test.key" 2048
     openssl req -new -key "/etc/nginx/ssl/vitalitycams.test.key" -out "/etc/nginx/ssl/vitalitycams.test.csr" -subj "/CN=vitalitycams.test/O=vitalitycams.test/C=US"
