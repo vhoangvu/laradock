@@ -29,13 +29,13 @@ echo -e "\n$mgrUser $mgrPass\n" >> ${WMSAPP_HOME}/conf/jmxremote.password
 if [[ ! -z $WSE_IP_PARAM ]]; then
 	#change localhost to some user defined IP
 	cat "${WMSAPP_HOME}/conf/Server.xml" > serverTmp
-	sed 's|\(<IpAddress>localhost</IpAddress>\)|<IpAddress>'"$WSE_IP_PARAM"'</IpAddress> <!--changed for default install. \1-->|' <serverTmp >Server.xml
-	sed 's|\(<RMIServerHostName>localhost</RMIServerHostName>\)|<RMIServerHostName>'"$WSE_IP_PARAM"'</RMIServerHostName> <!--changed for default install. \1-->|' <Server.xml >serverTmp
+	sed 's|\(<IpAddress>localhost</IpAddress>\)|<IpAddress>'"$WSE_IP_PARAM"'</IpAddress>|' <serverTmp >Server.xml
+	sed 's|\(<RMIServerHostName>localhost</RMIServerHostName>\)|<RMIServerHostName>'"$WSE_IP_PARAM"'</RMIServerHostName>|' <Server.xml >serverTmp
 	cat serverTmp > ${WMSAPP_HOME}/conf/Server.xml
 	rm serverTmp Server.xml
 	
 	cat "${WMSAPP_HOME}/conf/VHost.xml" > vhostTmp
-	sed 's|\(<IpAddress>${com.wowza.wms.HostPort.IpAddress}</IpAddress>\)|<IpAddress>'"$WSE_IP_PARAM"'</IpAddress> <!--changed for default cloud install. \1-->|' <vhostTmp >${WMSAPP_HOME}/conf/VHost.xml 
+	sed 's|\(<IpAddress>${com.wowza.wms.HostPort.IpAddress}</IpAddress>\)|<IpAddress>'"$WSE_IP_PARAM"'</IpAddress>|' <vhostTmp >${WMSAPP_HOME}/conf/VHost.xml 
 	rm vhostTmp
 fi
 
@@ -50,7 +50,7 @@ fi
 # if [ -f "${WMSAPP_HOME}/essensus/ssl/keystore.jks" ]; then
 		# cat "${WMSAPP_HOME}/conf/VHost.xml" > vhostTmp
 		# sed 's|\(<KeyStorePath>${com.wowza.wms.context.VHostConfigHome}/conf/keystore.jks</KeyStorePath>\)|<KeyStorePath>${com.wowza.wms.context.VHostConfigHome}/essensus/ssl/keystore.jks</KeyStorePath> <!--changed for default install. \1-->|' <vhostTmp >VHost.xml
-		# sed 's|\(<KeyStorePassword>\[password\]</KeyStorePassword>\)|<KeyStorePassword>123456</KeyStorePassword> <!--changed for default install. \1-->|' <VHost.xml >vhostTmp
+		# sed 's|\(<KeyStorePassword>\[password\]</KeyStorePassword>\)|<KeyStorePassword>123456</KeyStorePassword>|' <VHost.xml >vhostTmp
 		# sed -e '/.*<!-- 443 with SSL -->$/ {
 			# N; /.*<!--$/ {
 				# N; /.*<HostPort>$/ {
@@ -63,15 +63,15 @@ fi
 				# s/-->//;
 			# }
 		# }' <VHost.xml > vhostTmp
-		# sed 's|\(<Port>1935,80,443,554</Port>\)|<Port>1935,80,554</Port> <!--changed for default install. \1-->|' <vhostTmp >VHost.xml
+		# sed 's|\(<Port>1935,80,443,554</Port>\)|<Port>1935,80,554</Port>|' <vhostTmp >VHost.xml
 		# cat VHost.xml > ${WMSAPP_HOME}/conf/VHost.xml
 		# rm vhostTmp VHost.xml
 # fi
 #essensus customize: fix duplicate 443 port and use streamlock certificate
 if [ -f "${WMSAPP_HOME}/essensus/ssl/${STREAMLOCK_FILE}" ]; then
 		cat "${WMSAPP_HOME}/conf/VHost.xml" > vhostTmp
-		sed 's|\(<KeyStorePath>${com.wowza.wms.context.VHostConfigHome}/conf/keystore.jks</KeyStorePath>\)|<KeyStorePath>${com.wowza.wms.context.VHostConfigHome}/essensus/ssl/'"$STREAMLOCK_FILE"'</KeyStorePath> <!--changed for default install. \1-->|' <vhostTmp >VHost.xml
-		sed 's|\(<KeyStorePassword>\[password\]</KeyStorePassword>\)|<KeyStorePassword>'"$STREAMLOCK_PASSWORD"'</KeyStorePassword> <!--changed for default install. \1-->|' <VHost.xml >vhostTmp
+		sed 's|\(<KeyStorePath>${com.wowza.wms.context.VHostConfigHome}/conf/keystore.jks</KeyStorePath>\)|<KeyStorePath>${com.wowza.wms.context.VHostConfigHome}/essensus/ssl/'"$STREAMLOCK_FILE"'</KeyStorePath>|' <vhostTmp >VHost.xml
+		sed 's|\(<KeyStorePassword>\[password\]</KeyStorePassword>\)|<KeyStorePassword>'"$STREAMLOCK_PASSWORD"'</KeyStorePassword>|' <VHost.xml >vhostTmp
 		sed -e '/.*<!-- 443 with SSL -->$/ {
 			N; /.*<!--$/ {
 				N; /.*<HostPort>$/ {
@@ -84,7 +84,7 @@ if [ -f "${WMSAPP_HOME}/essensus/ssl/${STREAMLOCK_FILE}" ]; then
 				s/-->//;
 			}
 		}' <VHost.xml > vhostTmp
-		sed 's|\(<Port>1935,80,443,554</Port>\)|<Port>1935,80,554</Port> <!--changed for default install. \1-->|' <vhostTmp >VHost.xml
+		sed 's|\(<Port>1935,80,443,554</Port>\)|<Port>1935,80,554</Port>|' <vhostTmp >VHost.xml
 		cat VHost.xml > ${WMSAPP_HOME}/conf/VHost.xml
 		rm vhostTmp VHost.xml
 fi
@@ -155,7 +155,7 @@ ant -buildfile "${WMSAPP_HOME}/essensus/module/build_server.xml" jar
 rm -rf "${WMSAPP_HOME}/transcoder/templates/*.*" 
 cp "${WMSAPP_HOME}/essensus/module/conf/transcoder/audioonly_h264.xml" "${WMSAPP_HOME}/transcoder/templates" 
 #essensus customize: copy to test
-#cp /usr/local/WowzaStreamingEngine/conf/VHost.xml /usr/local/WowzaStreamingEngine/essensus/ssl/
+cp /usr/local/WowzaStreamingEngine/conf/VHost.xml /usr/local/WowzaStreamingEngine/essensus/ssl/
 #cp /usr/local/WowzaStreamingEngine/conf/Application.xml /usr/local/WowzaStreamingEngine/essensus/ssl/
 #cp "${WMSAPP_HOME}/conf/webrtc/Application.xml" /usr/local/WowzaStreamingEngine/essensus/ssl/
 
